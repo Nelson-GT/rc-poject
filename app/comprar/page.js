@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Comprar() {
+    const router = useRouter();
     const [cantidad, setcantidad] = useState(1);
     const [modalConfirm, setmodalConfirm] = useState(false);
 
@@ -104,7 +105,9 @@ export default function Comprar() {
                         <div className="flex items-center justify-center mt-3 gap-3">
                             <Button
                             className="w-[50%] bg-green-500 hover:bg-green-600 hover:text-white rounded"
-                            onClick={() => {setmodalConfirm(false)}}
+                            onClick={() => {setmodalConfirm(false);
+                                            router.push("/datos_usuario")
+                            }}
                             >
                                 Aceptar
                             </Button>
