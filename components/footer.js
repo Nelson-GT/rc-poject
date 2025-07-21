@@ -38,7 +38,7 @@ export default function FooterSection() {
                             href="/"
                             aria-label="go home"
                             className="mx-auto block size-fit">
-                            <Image src="/corralitoOrange.jpg" width={175} height={175} style={{ objectFit: 'contain' }}></Image>
+                            <Image src="/corralitoOrange.jpg" width={175} height={175} style={{ objectFit: 'contain' }} alt="logo Corralitos"></Image>
                         </Link>
                     </div>
                     <div className="my-8 flex flex-col lg:flex-row text-end gap-3 lg:gap-6 text-sm">

@@ -26,7 +26,7 @@ export const NavBar = () => {
                                 href="/"
                                 aria-label="home"
                                 className="flex items-center space-x-2">
-                                <Image src="/corralitoOrange.jpg" width={50} height={50} style={{ objectFit: 'contain' }}></Image>
+                                <Image src="/corralitoOrange.jpg" width={50} height={50} style={{ objectFit: 'contain' }} alt="Logo Corralitos"></Image>
                             </Link>
 
                             <button

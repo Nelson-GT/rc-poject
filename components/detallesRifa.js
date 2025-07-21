@@ -1,53 +1,53 @@
+"use client"
 import Link from 'next/link'
 import Image from "next/image";
 import Button from "@/components/ui/button"
 import ButtonColors from "@/components/ui/buttonColors"
-
-const fecha = new Date();
-
-const fechaFormateada = fecha.toLocaleDateString('es-ES', {day: '2-digit', month: 'long', year: 'numeric',});
-
-const imagenRifa = "/rifaEjemplo.png"
-
-const precioBoleto = 180.00;
-
-const tituloRifa = "Gran rifa 10000 Boletos Moto 0Km | +10 premios a repartir";
-
-const detallesRifa = "Gran rifa con combo de Moto 0Km a realiza el día 20 de Júlio del 2025, a través de nuestras redes sociales"
-
-const premios = [
-    {
-        titulo: "Primer premio",
-        descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        imagen: "/motoRifa.jpeg"
-        
-    },
-    {
-        titulo: "Segundo Premio",
-        descripcion: "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ",
-        imagen: "/motoRifa.jpeg"
-    },
-    {
-        titulo: "Tercer Premio",
-        descripcion: "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
-        imagen: "/motoRifa.jpeg"
-    },
-    {
-        titulo: "Cuarto Premio",
-        descripcion: " reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat ",
-        imagen: "/motoRifa.jpeg"
-    },{
-        titulo: "Quinto Premio",
-        descripcion: "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        imagen: "/motoRifa.jpeg"
-    },
-    {
-        titulo: "premio Extra",
-        descripcion: "pruecupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.ba",
-        imagen: "/motoRifa.jpeg"
-    },]
+import RifaCard from "@/components/rifaCard"
+import { useRouter } from "next/navigation";
 
 export default function DetallesRifa() {
+    const router = useRouter();
+    
+    const precioBoleto = 180.00;
+    
+    const fecha = new Date();
+    const fechaFormateada = fecha.toLocaleDateString('es-ES', {day: '2-digit', month: 'long', year: 'numeric',});
+    
+    const imagenRifa = "/rifaEjemplo.png"
+    const tituloRifa = "Gran rifa 10000 Boletos Moto 0Km | +10 premios a repartir";
+    const detallesRifa = "Gran rifa con combo de Moto 0Km a realiza el día 20 de Júlio del 2025, a través de nuestras redes sociales"
+    const premios = [
+        {
+            titulo: "Primer premio",
+            descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+            imagen: "/motoRifa.jpeg"
+            
+        },
+        {
+            titulo: "Segundo Premio",
+            descripcion: "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ",
+            imagen: "/motoRifa.jpeg"
+        },
+        {
+            titulo: "Tercer Premio",
+            descripcion: "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
+            imagen: "/motoRifa.jpeg"
+        },
+        {
+            titulo: "Cuarto Premio",
+            descripcion: " reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat ",
+            imagen: "/motoRifa.jpeg"
+        },{
+            titulo: "Quinto Premio",
+            descripcion: "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            imagen: "/motoRifa.jpeg"
+        },
+        {
+            titulo: "premio Extra",
+            descripcion: "pruecupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.ba",
+            imagen: "/motoRifa.jpeg"
+        },]
     return (
         <div className="w-full flex flex-col justify-center items-center">
             <div className="w-[90%] lg:w-[50%] py-8 md:py-10 rounded-4xl border border-gray-300 shadow-xl">
@@ -56,7 +56,7 @@ export default function DetallesRifa() {
                         src = {imagenRifa}
                         width={0}
                         height={0}
-                        alt="Logo"
+                        alt="Imagen Rifa"
                         className="w-[100%] rounded-2xl h-auto"
                         sizes="(max-width: 768px) 90vw, 175px"
                     />
@@ -71,7 +71,8 @@ export default function DetallesRifa() {
                         </div>
                     </div>
                     <h1><span className="font-bold text-xl text-black">{tituloRifa.toUpperCase()}</span></h1>
-                    <Button className="bg-orange text-white lg:m-3 lg:my-0">
+                    <Button className="bg-orange text-white lg:m-3 lg:my-0"
+                            onClick={() => router.push("/comprar")}>
                         Comprar Boletos
                     </Button>
                 </div>
@@ -101,13 +102,13 @@ export default function DetallesRifa() {
                     }
 
                     return (
-                        <div key={index} className="flex flex-col border border-orange p-3 rounded-xl">
+                        <div key={index} className="flex flex-col border border-orange p-3 rounded-xl gap-3">
                             <div className="flex my-3">
                                 <Image
                                     src = {premio.imagen}
                                     width={0}
                                     height={0}
-                                    alt="Logo"
+                                    alt="Imagen premio"
                                     className="w-[100%] rounded-2xl h-auto"
                                     sizes="(max-width: 768px) 90vw, 175px"
                                 />

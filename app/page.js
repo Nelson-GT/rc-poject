@@ -1,6 +1,8 @@
+"use client"
 import {NavBar} from "@/components/navbar"
 import Footer from "@/components/footer"
 import DetallesRifa from "@/components/detallesRifa";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   return (
