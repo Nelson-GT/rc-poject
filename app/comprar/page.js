@@ -106,7 +106,7 @@ export default function Comprar() {
                             <Button
                             className="w-[50%] bg-green-500 hover:bg-green-600 hover:text-white rounded"
                             onClick={() => {setmodalConfirm(false);
-                                            router.push("/datos_usuario")
+                                            router.push(`/datos_usuario/${cantidad}`)
                             }}
                             >
                                 Aceptar

@@ -79,12 +79,13 @@ export default function DetallesRifa() {
             </div>
             <div className="w-[90%] lg:w-[50%] mt-10 px-5 flex flex-col gap-6 text-start">
                 <h2><span className="font-bold text-xl text-black">Detalles de la Rifa</span></h2>
-                <div className="flex flex-wrap max-w-lg break-words">
+                <div className="flex flex-wrap max-w-full break-words">
                     <p className="text-dm font-medium text-black break-words">{detallesRifa}</p>
                 </div>
             </div>
             <div className="w-[90%] lg:w-[50%] mt-10 px-5 flex flex-col gap-6 text-start">
                 <h2><span className="font-bold text-xl text-black">Premios</span></h2>
+                <div className="w-full flex flex-wrap gap-3 justify-between items-center">
                 {premios.map((premio, index) => {
                     let contenido;
                     switch (index) {
@@ -102,7 +103,7 @@ export default function DetallesRifa() {
                     }
 
                     return (
-                        <div key={index} className="flex flex-col border border-orange p-3 rounded-xl gap-3">
+                        <div key={index} className="flex flex-col lg:w-[45%] border border-orange p-3 rounded-xl gap-3">
                             <div className="flex my-3">
                                 <Image
                                     src = {premio.imagen}
@@ -118,6 +119,7 @@ export default function DetallesRifa() {
                         </div>
                     );
                     })}
+                </div>
             </div>
         </div>
     )
