@@ -163,7 +163,7 @@ export default function Comprar() {
             <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm lg:max-w-md w-full">
                 <p className="text-black text-center text-2xl font-bold mb-3">Realiza el Pago Móvil</p>
                 <div className="flex flex-col gap-3">
-                    <p className="text-black text-center text-md font-medium mb-3">Para confirmar la comprar de tus tickets, por favor realiza un pagomovil a los siguientes datos</p>
+                    <p className="text-black text-center text-md font-medium mb-3">Para confirmar la compra de tus tickets, realiza un pagomovil a los siguientes datos</p>
                     <div className="flex justify-between border border-orange rounded-lg p-3">
                         <span className="text-black font-medium">Cédula:</span>
                         <div className="flex justify-center items-center">

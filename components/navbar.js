@@ -4,16 +4,19 @@ import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import React from 'react'
 import Image from 'next/image';
+import { useRouter } from "next/navigation"; 
 
 const menuItems = [
-    { name: 'Features', href: '#link' },
-    { name: 'Solution', href: '#link' },
-    { name: 'Pricing', href: '#link' },
-    { name: 'About', href: '#link' },
+    { name: 'Inicio', href: '/' },
+    { name: 'Terminos y Condiciones', href: '/terminos_condiciones' },
+    { name: 'Conocenos', href: '#' },
+    { name: 'Ubicación', href: '#' },
+    { name: 'Contactanos', href: '#' },
 ]
 
 export const NavBar = () => {
     const [menuState, setMenuState] = React.useState(false)
+    const router = useRouter();
     return (
         <header>
             <nav
