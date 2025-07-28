@@ -1,17 +1,18 @@
-"use client";
-import { NavBar } from "@/components/navbar";
-import Footer from "@/components/footer";
-import RifaCard from "@/components/rifaCard";
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
-import Select from "@/components/ui/select";
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+"use client"
+import { NavBar } from "@/components/navbar"
+import Footer from "@/components/footer"
+import RifaCard from "@/components/rifaCard"
+import Button from "@/components/ui/button"
+import Input from "@/components/ui/input"
+import Select from "@/components/ui/select"
+import { useState } from "react"
+import { useParams, useRouter } from "next/navigation"
+import { CreditCard, CheckCircle } from "lucide-react"
 
-export default function Comprar() {
-    const router = useRouter();
-    const { id } = useParams();
-    const cantidad = parseInt(id)
+export default function ConfirmarPago() {
+    const router = useRouter()
+    const { id } = useParams()
+    const cantidad = Number.parseInt(id)
 
     const bancos = [
         { codigo: "0102", nombre: "BANCO DE VENEZUELA" },
@@ -41,147 +42,159 @@ export default function Comprar() {
         { codigo: "0169", nombre: "R4 BANCO MICROFINANCIERO C.A." }
     ];
 
+
     const [form, setForm] = useState({
         referencia: "",
-        banco: "0102 - Banco de Venezuela",
+        banco: "0102",
         tipoTlf: "0412",
-        telefono: ""
-    });
+        telefono: "",
+    })
 
-    const [modalConfirm, setModalConfirm] = useState(false);
-    const [errores, setErrores] = useState({});
+    const [modalConfirm, setModalConfirm] = useState(false)
+    const [errores, setErrores] = useState({})
 
     const validar = () => {
-        const nuevosErrores = {};
+        const nuevosErrores = {}
 
-        // Número de referencia
         if (!form.referencia.trim()) {
-            nuevosErrores.referencia = "Número de referencia requerido";
+        nuevosErrores.referencia = "Número de referencia requerido"
         } else if (!/^\d{6,12}$/.test(form.referencia)) {
-            nuevosErrores.referencia = "Debe tener entre 6 y 12 dígitos";
+        nuevosErrores.referencia = "Debe tener entre 6 y 12 dígitos"
         }
 
-        // Teléfono
-        if (!form.tipoTlf || !["0412", "0422", "0414", "0424", "0416", "0426"].includes(form.tipoTlf)) {
-        nuevosErrores.tipoTlf = "Prefijo inválido";
-        }
         if (!/^\d{7}$/.test(form.telefono)) {
-        nuevosErrores.telefono = "Número telefónico inválido";
+        nuevosErrores.telefono = "Número telefónico inválido (7 dígitos)"
         }
 
-        setErrores(nuevosErrores);
-        return Object.keys(nuevosErrores).length === 0;
-    };
+        setErrores(nuevosErrores)
+        return Object.keys(nuevosErrores).length === 0
+    }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         if (validar()) {
-            setModalConfirm(true);
+        setModalConfirm(true)
         }
-    };
+    }
 
     return (
-        <div className="bg-white">
-            <NavBar />
-            <div className="my-30 mb-20">
-                <RifaCard />
-                <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center mt-8">
-                    <div className="w-full text-center">
-                        <h1 className="text-black font-bold text-2xl">Datos del Pagomovil</h1>
-                        <div className="flex flex-col justify-center items-center gap-2 lg:gap-5 mt-5">
-                            <div className="w-[90%] lg:w-[50%] flex flex-col items-center gap-5">
-                                <div className="w-full mx-2 text-start gap-3">
-                                    <label className="text-black ml-4">Número de referencia *</label>
-                                    <Input
-                                        value={form.referencia}
-                                        onChange={e => setForm({ ...form, referencia: e.target.value })}
-                                        placeholder="0123456789"
-                                        className="text-black w-full mt-2"
-                                    />
-                                    {errores.referencia && <p className="text-red-500 ml-4 text-sm">{errores.referencia}</p>}
-                                </div>
-                                <div className="w-full mx-2 text-start">
-                                    <label className="text-black ml-4">Banco Emisor *</label>
-                                    <div className="flex flex-row w-full gap-3">
-                                        <Select
-                                        value={form.banco}
-                                        onChange={e => setForm({ ...form, banco: e.target.value })}
-                                        className="text-black w-full text-left border border-orange focus:outline-none mt-2"
-                                        >
-                                        {bancos.map(banco => (
-                                            <option key={banco.codigo} value={banco.codigo}>
-                                            {banco.codigo} - {banco.nombre}
-                                            </option>
-                                        ))}
-                                        </Select>
-                                    </div>
-                                    {errores.banco && <p className="text-red-500 ml-4 text-sm">{errores.banco}</p>}
-                                </div>
-                                <div className="w-full mx-2 text-start">
-                                    <label className="text-black ml-4">Número de teléfono (Emisor)*</label>
-                                    <div className="flex flex-row w-full gap-3 mt-2">
-                                        <Select
-                                        value={form.tipoTlf}
-                                        onChange={e => setForm({ ...form, tipoTlf: e.target.value })}
-                                        className="text-black w-[30%] text-center border border-orange focus:outline-none"
-                                        >
-                                        <option value="0412">0412</option>
-                                        <option value="0422">0422</option>
-                                        <option value="0414">0414</option>
-                                        <option value="0424">0424</option>
-                                        <option value="0416">0416</option>
-                                        <option value="0426">0426</option>
-                                        </Select>
-                                        <Input
-                                        value={form.telefono}
-                                        onChange={e => setForm({ ...form, telefono: e.target.value })}
-                                        placeholder="1234567"
-                                        className="text-black w-[70%]"
-                                        />
-                                    </div>
-                                    {errores.telefono && <p className="text-red-500 ml-4 text-sm">{errores.telefono}</p>}
-                                </div>
-                            </div>
-                            <div className="mt-5 w-[90%] lg:w-[50%] flex flex-row justify-center items-center gap-2 lg:gap-5">
-                                <Button
-                                className="text-black border border-orange w-[50%]"
-                                type="button"
-                                onClick={() => router.push(`/datos_usuario/${cantidad}`)}
-                                >
-                                Volver
-                                </Button>
-                                <Button
-                                className="text-white bg-orange border border-orange w-[50%]"
-                                type="submit"
-                                >
-                                Continuar
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        <div className="min-h-screen bg-gray-50">
+        <NavBar />
 
-            {modalConfirm && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-transparent bg-opacity-30 backdrop-blur-sm">
-                    <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm lg:max-w-md w-full">
-                        <p className="text-black text-center text-2xl font-bold mb-3">Pago Recibido Exitosamente</p>
-                        <p className="text-black text-center text-md font-medium mb-3">Haz realizado correctamente la compra de tus boletos, a continuación se te indicarán cuales son los números elegidos</p>
-                        <div className="flex justify-center gap-3 mt-5">
-                            <Button className="w-[50%] bg-green-500 hover:bg-green-600 hover:text-white" 
-                            onClick={() => {setModalConfirm(false);
-                                            router.push(`/boletos/${cantidad}`);
-                            }}>
-                                Continuar
-                            </Button>
-                            <Button className="w-[50%] bg-gray-400 hover:bg-gray-500 hover:text-white" onClick={() => setModalConfirm(false)}>
-                                Cancelar
-                            </Button>
-                        </div>
+        <div className="pt-20 pb-12">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pt-8">
+            <RifaCard/>
+
+            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                <div className="text-center mb-8">
+                <CreditCard className="w-8 h-8 text-orange-500 mx-auto mb-4" />
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">Datos del Pago Móvil</h1>
+                <p className="text-gray-600">Ingresa los datos de tu transferencia para verificar el pago</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 gap-6">
+                    <Input
+                    label="Número de referencia *"
+                    value={form.referencia}
+                    onChange={(e) => setForm({ ...form, referencia: e.target.value })}
+                    placeholder="0123456789"
+                    error={errores.referencia}
+                    />
+
+                    <Select
+                    label="Banco Emisor *"
+                    value={form.banco}
+                    onChange={(e) => setForm({ ...form, banco: e.target.value })}
+                    error={errores.banco}
+                    >
+                    {bancos.map((banco) => (
+                        <option key={banco.codigo} value={banco.codigo}>
+                        {banco.codigo} - {banco.nombre}
+                        </option>
+                    ))}
+                    </Select>
+
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Número de teléfono (Emisor) *</label>
+                    <div className="flex gap-3">
+                        <Select
+                        value={form.tipoTlf}
+                        onChange={(e) => setForm({ ...form, tipoTlf: e.target.value })}
+                        className="w-24"
+                        >
+                        <option value="0412">0412</option>
+                        <option value="0422">0422</option>
+                        <option value="0414">0414</option>
+                        <option value="0424">0424</option>
+                        <option value="0416">0416</option>
+                        <option value="0426">0426</option>
+                        </Select>
+                        <Input
+                        value={form.telefono}
+                        onChange={(e) => setForm({ ...form, telefono: e.target.value })}
+                        placeholder="1234567"
+                        maxLength={7}
+                        error={errores.telefono}
+                        />
+                    </div>
                     </div>
                 </div>
-            )}
-            <Footer />
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                    <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1 bg-transparent"
+                    onClick={() => router.push(`/datos_usuario/${cantidad}`)}
+                    >
+                    Volver
+                    </Button>
+                    <Button type="submit" className="flex-1">
+                    Verificar Pago
+                    </Button>
+                </div>
+                </form>
+            </div>
+            </div>
         </div>
-    );
+
+        {/* Modal de confirmación */}
+        {modalConfirm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-transparent bg-opacity-50 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+                <div className="p-6 space-y-6 text-center">
+                <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">¡Pago Recibido Exitosamente!</h2>
+                    <p className="text-gray-600">
+                    Has realizado correctamente la compra de tus boletos. A continuación se te mostrarán los números
+                    elegidos.
+                    </p>
+                </div>
+
+                <div className="flex gap-3">
+                    <Button variant="secondary" className="flex-1" onClick={() => setModalConfirm(false)}>
+                    Cancelar
+                    </Button>
+                    <Button
+                    variant="success"
+                    className="flex-1"
+                    onClick={() => {
+                        setModalConfirm(false)
+                        router.push(`/boletos/${cantidad}`)
+                    }}
+                    >
+                    Ver Boletos
+                    </Button>
+                </div>
+                </div>
+            </div>
+            </div>
+        )}
+
+        <Footer />
+        </div>
+    )
 }

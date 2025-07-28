@@ -1,124 +1,113 @@
 "use client"
-import Link from 'next/link'
-import Image from "next/image";
+import Image from "next/image"
 import Button from "@/components/ui/button"
-import ButtonColors from "@/components/ui/buttonColors"
 import RifaCard from "@/components/rifaCard"
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
+import { Calendar, Trophy } from "lucide-react"
 
 export default function DetallesRifa() {
-    const router = useRouter();
-    
-    const precioBoleto = 180.00;
-    
-    const fecha = new Date();
-    const fechaFormateada = fecha.toLocaleDateString('es-ES', {day: '2-digit', month: 'long', year: 'numeric',});
-    
-    const imagenRifa = "/rifaEjemplo.png"
-    const tituloRifa = "Gran rifa 10000 Boletos Moto 0Km | +10 premios a repartir";
-    const detallesRifa = "Gran rifa con combo de Moto 0Km a realiza el día 20 de Júlio del 2025, a través de nuestras redes sociales"
+    const router = useRouter()
+
+    const detallesRifa =
+        "Gran rifa con combo de Moto 0Km a realizar el día 20 de Julio del 2025, a través de nuestras redes sociales. ¡No te pierdas esta increíble oportunidad de ganar!"
+
     const premios = [
         {
-            titulo: "Primer premio",
-            descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-            imagen: "/motoRifa.jpeg"
-            
+        titulo: "Primer premio",
+        descripcion: "Moto 0Km completamente nueva con todos los documentos en regla y garantía del fabricante.",
+        imagen: "/motoRifa.jpeg",
         },
         {
-            titulo: "Segundo Premio",
-            descripcion: "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ",
-            imagen: "/motoRifa.jpeg"
+        titulo: "Segundo Premio",
+        descripcion: "Smartphone de última generación con todos los accesorios incluidos y garantía extendida.",
+        imagen: "/motoRifa.jpeg",
         },
         {
-            titulo: "Tercer Premio",
-            descripcion: "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
-            imagen: "/motoRifa.jpeg"
+        titulo: "Tercer Premio",
+        descripcion: "Tablet premium con teclado y stylus incluidos, perfecta para trabajo y entretenimiento.",
+        imagen: "/motoRifa.jpeg",
         },
         {
-            titulo: "Cuarto Premio",
-            descripcion: " reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat ",
-            imagen: "/motoRifa.jpeg"
-        },{
-            titulo: "Quinto Premio",
-            descripcion: "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            imagen: "/motoRifa.jpeg"
+        titulo: "Cuarto Premio",
+        descripcion: "Auriculares inalámbricos de alta gama con cancelación de ruido activa.",
+        imagen: "/motoRifa.jpeg",
         },
         {
-            titulo: "premio Extra",
-            descripcion: "pruecupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.ba",
-            imagen: "/motoRifa.jpeg"
-        },]
-    return (
-        <div className="w-full flex flex-col justify-center items-center">
-            <div className="w-[90%] lg:w-[50%] py-8 md:py-10 rounded-4xl border border-gray-300 shadow-xl">
-                <div className="px-5 flex flex-col gap-6">
-                    <Image
-                        src = {imagenRifa}
-                        width={0}
-                        height={0}
-                        alt="Imagen Rifa"
-                        className="w-[100%] rounded-2xl h-auto"
-                        sizes="(max-width: 768px) 90vw, 175px"
-                    />
-                    <div className="flex justify-between items-center">
-                        <div className="flex flex-row gap-2">
-                            <img src="/calendar.svg" alt="Calendario" className="w-6 h-6" />
-                            <span className="text-sm font-bold text-gray-700">{fechaFormateada}</span>
-                        </div>
-                        <div className="flex flex-col lg:flex-row text-end">
-                            <span className="text-sm font-medium text-gray-700 mx-3">Precio</span>
-                            <span className="text-sm font-bold text-gray-700 mx-3">Bs: {precioBoleto}</span>
-                        </div>
-                    </div>
-                    <h1><span className="font-bold text-xl text-black">{tituloRifa.toUpperCase()}</span></h1>
-                    <Button className="bg-orange text-white lg:m-3 lg:my-0"
-                            onClick={() => router.push("/comprar")}>
-                        Comprar Boletos
-                    </Button>
-                </div>
-            </div>
-            <div className="w-[90%] lg:w-[50%] mt-10 px-5 flex flex-col gap-6 text-start">
-                <h2><span className="font-bold text-xl text-black">Detalles de la Rifa</span></h2>
-                <div className="flex flex-wrap max-w-full break-words">
-                    <p className="text-dm font-medium text-black break-words">{detallesRifa}</p>
-                </div>
-            </div>
-            <div className="w-[90%] lg:w-[50%] mt-10 px-5 flex flex-col gap-6 text-start">
-                <h2><span className="font-bold text-xl text-black">Premios</span></h2>
-                <div className="w-full flex flex-wrap gap-3 justify-between items-center">
-                {premios.map((premio, index) => {
-                    let contenido;
-                    switch (index) {
-                        case 0:
-                        contenido = <p className="text-black text-start font-bold text-xl">🥇 {premio.titulo.toUpperCase()}</p>;
-                        break;
-                        case 1:
-                        contenido = <p className="text-black font-bold text-xl">🥈 {premio.titulo.toUpperCase()}</p>;
-                        break;
-                        case 2:
-                        contenido = <p className="text-black font-bold text-xl">🥉 {premio.titulo.toUpperCase()}</p>;
-                        break;
-                        default:
-                        contenido = <p className="text-black font-bold text-xl">💎 {premio.titulo.toUpperCase()}</p>;
-                    }
+        titulo: "Quinto Premio",
+        descripcion: "Smartwatch deportivo con GPS y monitor de salud integrado.",
+        imagen: "/motoRifa.jpeg",
+        },
+        {
+        titulo: "Premio Extra",
+        descripcion: "Voucher de compras por valor de Bs 500 en tiendas participantes.",
+        imagen: "/motoRifa.jpeg",
+        },
+    ]
 
-                    return (
-                        <div key={index} className="flex flex-col lg:w-[45%] border border-orange p-3 rounded-xl gap-3">
-                            <div className="flex my-3">
-                                <Image
-                                    src = {premio.imagen}
-                                    width={0}
-                                    height={0}
-                                    alt="Imagen premio"
-                                    className="w-[100%] rounded-2xl h-auto"
-                                    sizes="(max-width: 768px) 90vw, 175px"
-                                />
-                            </div>
-                            {contenido}
-                            <p><span className="text-black font-medium text-md">{premio.descripcion}</span></p>
+    const getEmojiForPrize = (index) => {
+        switch (index) {
+        case 0:
+            return "🥇"
+        case 1:
+            return "🥈"
+        case 2:
+            return "🥉"
+        default:
+            return "🎁"
+        }
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-50 pt-20 pb-12 rounded-xl">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                {/* Tarjeta principal de la rifa */}
+                <RifaCard>
+                    <Button size="lg" className="w-full sm:w-auto" onClick={() => router.push("/comprar")}>
+                        🎫 Comprar Boletos
+                    </Button>
+                </RifaCard>
+
+                {/* Detalles de la rifa */}
+                <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <Calendar className="w-6 h-6 text-orange-500" />
+                        <h2 className="text-2xl font-bold text-gray-900">Detalles de la Rifa</h2>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed text-lg">{detallesRifa}</p>
+                </div>
+
+                {/* Premios */}
+                <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                    <div className="flex items-center gap-3 mb-8">
+                        <Trophy className="w-6 h-6 text-orange-500" />
+                        <h2 className="text-2xl font-bold text-gray-900">Premios</h2>
+                    </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {premios.map((premio, index) => (
+                    <div
+                        key={index}
+                        className="group bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                        <div className="relative mb-4 overflow-hidden rounded-lg">
+                        <Image
+                            src={premio.imagen || "/placeholder.svg"}
+                            width={400}
+                            height={0}
+                            alt={`Imagen ${premio.titulo}`}
+                            className="w-full h-auto object-contain mx-auto group-hover:scale-110 transition-transform duration-300"
+                        />
                         </div>
-                    );
-                    })}
+
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-2xl">{getEmojiForPrize(index)}</span>
+                            <h3 className="text-xl font-bold text-gray-900">{premio.titulo.toUpperCase()}</h3>
+                        </div>
+
+                        <p className="text-gray-700 leading-relaxed">{premio.descripcion}</p>
+                    </div>
+                    ))}
+                </div>
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ export default function Home() {
             <NavBar />
         
             {/* Detalles de la rifa, irá el título, imagen representativa, precio, fecha de juego y botón de compra */}
-            <div className="my-30 flex items-center justify-center">
+            <div className="my-15 flex items-center justify-center">
                 <DetallesRifa className="mt-30"/>
             </div>
             <Footer />
@@ -45,12 +45,12 @@ export default function Home() {
                         </div>
                         </div>
                         <div className="w-full flex justify-center">
-                        <Button
-                            className="w-[50%] bg-orange rounded mt-5"
-                            onClick={() => {setmodalConfirm(false)}}
-                        >
-                            Volver
-                        </Button>
+                            <Button
+                                className="w-[50%] bg-orange rounded mt-5"
+                                onClick={() => {setmodalConfirm(false)}}
+                            >
+                                Volver
+                            </Button>
                         </div>
                     </div>
                 </div>

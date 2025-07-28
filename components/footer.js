@@ -1,77 +1,86 @@
-import Link from 'next/link'
-import Image from "next/image";
+import Link from "next/link"
+import Image from "next/image"
+import { Instagram, MessageCircleHeart, ExternalLink, Palmtree } from "lucide-react"
 
 const links = [
-    { title: 'Inicio', href: '/' },
-    { title: 'Terminos y Condiciones', href: '/terminos_condiciones' },
-    { title: 'Conocenos', href: '#' },
-    { title: 'Ubicación', href: '#' },
-    { title: 'Contactanos', href: '#' },
+    { title: "Inicio", href: "/" },
+    { title: "Términos y Condiciones", href: "/terminos_condiciones" },
+    { title: "Ubicación", href: "/ubicacion" },
+    { title: "Contáctanos", href: "https://wa.me/584124025369" },
 ]
 
-export default function FooterSection() {
+export default function Footer() {
     return (
-        <footer className="py-10 md:py-16 bg-orange">
-            <div className="mx-auto max-w-5xl px-6">
-                <div className="flex flex-row lg:flex-col w-full justify-between px-8 items-center">
-                    <div>
-                        <Link
-                            href="/"
-                            aria-label="go home"
-                            className="mx-auto block size-fit">
-                            <Image src="/corralitoOrange.jpg" width={175} height={175} style={{ objectFit: 'contain' }} alt="logo Corralitos"></Image>
+        <footer className="bg-orange-500 text-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    {/* Logo */}
+                    <div className="flex justify-center lg:justify-start">
+                        <Link href="/" aria-label="go home" className="block">
+                        <Image
+                            src="/corralitoOrange.jpg"
+                            width={120}
+                            height={120}
+                            className="rounded-full object-cover shadow-lg"
+                            alt="logo Corralitos"
+                        />
                         </Link>
                     </div>
-                    <div className="my-8 flex flex-col lg:flex-row text-end gap-3 lg:gap-6 text-sm">
+
+                    {/* Links */}
+                    <div className="flex flex-col items-center space-y-4">
+                        <nav className="flex flex-col lg:flex-row gap-3 text-center">
                         {links.map((link, index) => (
                             <Link
-                                key={index}
-                                href={link.href}
-                                className="text-muted-foreground hover:text-primary block duration-150">
-                                <span className="font-medium">{link.title}</span>
+                            key={index}
+                            href={link.href}
+                            className="text-orange-100 hover:text-white px-3 py-2 rounded-md transition-colors duration-200 text-sm font-medium"
+                            >
+                            {link.title}
                             </Link>
                         ))}
+                        </nav>
+                    </div>
+
+                    {/* Social Media */}
+                    <div className="flex justify-center lg:justify-end">
+                        <div className="flex items-center space-x-4">
+                        <Link
+                            href="https://www.instagram.com/corralitoswings"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Instagram"
+                            className="p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
+                        >
+                            <Instagram className="w-5 h-5" />
+                        </Link>
+                        <Link
+                            href="https://wa.me/584124025369"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="WhatsApp"
+                            className="p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
+                        >
+                            <MessageCircleHeart className="w-5 h-5" />
+                        </Link>
+                        <Link
+                            href="https://linktr.ee/corralitoswings"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Linktree"
+                            className="p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
+                        >
+                            <Palmtree className="w-5 h-5" />
+                        </Link>
+                        </div>
                     </div>
                 </div>
-                <div className="my-8 mt-3 flex flex-wrap justify-center gap-6 text-sm">
-                    <Link
-                        href="https://www.instagram.com/corralitoswings"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Instagram"
-                        className="text-muted-foreground hover:text-primary block">
-                        <img
-                            src="/instagram.svg"
-                            alt="Icono para copiar"
-                            className="h-5 w-5"
-                        />
-                    </Link>
-                    <Link
-                        href="https://wa.me/584124025369"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="WhatsApp"
-                        className="text-muted-foreground hover:text-primary block">
-                        <img
-                            src="/whatsapp.svg"
-                            alt="Icono para copiar"
-                            className="h-5 w-5"
-                        />
-                    </Link>
-                    <Link
-                        href="https://linktr.ee/corralitoswings?fbclid=PAZXh0bgNhZW0CMTEAAaf0oERZZ9ieQF6BdLBgeLsjAQ06-bIXhF3ozBvQJX5zsAij9GcYfVlYwR-nqA_aem_8OgZ-zQMoimsjri8A6debQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="LinkedIn"
-                        className="text-muted-foreground hover:text-primary block">
-                        <img
-                            src="/linktree.svg"
-                            alt="Icono para copiar"
-                            className="h-5 w-5"
-                        />
-                    </Link>
+
+                <div className="mt-8 pt-8 border-t border-orange-400 text-center">
+                    <p className="text-orange-100 text-sm">
+                        © {new Date().getFullYear()} Corralitos Wings. Todos los derechos reservados.
+                    </p>
                 </div>
-                <span className="text-muted-foreground block text-center text-sm font-medium"> © {new Date().getFullYear()} Corralitos Wings, Todos los derechos reservados</span>
             </div>
         </footer>
     )
