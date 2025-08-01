@@ -8,6 +8,10 @@ import Select from "@/components/ui/select"
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { CreditCard, CheckCircle } from "lucide-react"
+import { createClient } from "@supabase/supabase-js"
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function ConfirmarPago() {
     const router = useRouter()
@@ -52,6 +56,8 @@ export default function ConfirmarPago() {
 
     const [modalConfirm, setModalConfirm] = useState(false)
     const [errores, setErrores] = useState({})
+    const [feedback, setFeedback] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const validar = () => {
         const nuevosErrores = {}
@@ -69,12 +75,59 @@ export default function ConfirmarPago() {
         setErrores(nuevosErrores)
         return Object.keys(nuevosErrores).length === 0
     }
-
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         if (validar()) {
         setModalConfirm(true)
         }
+    }
+
+    async function confirmarCompra() {
+        setLoading(true);
+        setFeedback("");
+        // Obtener los IDs de los boletos reservados
+        let ids = [];
+        if (typeof window !== "undefined") {
+            const idsStr = localStorage.getItem("boletos_reservados");
+            if (idsStr) ids = JSON.parse(idsStr);
+        }
+        if (!ids.length) {
+            setFeedback("No se encontraron boletos reservados para confirmar.");
+            setLoading(false);
+            return;
+        }
+        // Actualizar los boletos a estado 'ocupado' y guardar datos de pago
+        const datosUsuarioStr = localStorage.getItem("datos_usuario")
+            let datosUsuario = {}
+                if (datosUsuarioStr) {
+                    datosUsuario = JSON.parse(datosUsuarioStr)
+                }
+        console.log("Datos del usuario:", datosUsuario);
+        const { error } = await supabase
+            .from("Boletos")
+            .update({
+                estado: "ocupado",
+                fecha_compra: new Date().toISOString(),
+                telefono_comprador: datosUsuario.tipoTlf + datosUsuario.telefono,
+                nombre_comprador: datosUsuario.nombre,
+                correo_comprador: datosUsuario.correo
+            })
+            .in("id", ids)
+            .eq("estado", "reservado");
+        if (error) {
+            setFeedback("Error al confirmar el pago. Intenta de nuevo.");
+            setLoading(false);
+            return;
+        }
+        // Limpiar los IDs de localStorage
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("boletos_reservados");
+        }
+        localStorage.removeItem("datos_usuario");
+        setFeedback("");
+        setLoading(false);
+        setModalConfirm(true);
     }
 
     return (
@@ -150,10 +203,11 @@ export default function ConfirmarPago() {
                     >
                     Volver
                     </Button>
-                    <Button type="submit" className="flex-1">
-                    Verificar Pago
-                    </Button>
+                    <Button type="submit" className="flex-1" onClick={confirmarCompra} disabled={loading}>
+        {loading ? "Verificando..." : "Verificar Pago"}
+    </Button>
                 </div>
+                {feedback && <div className="text-red-500 text-center mt-2">{feedback}</div>}
                 </form>
             </div>
             </div>

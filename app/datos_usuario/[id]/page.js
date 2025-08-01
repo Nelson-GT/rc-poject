@@ -62,11 +62,13 @@ export default function DatosUsuario() {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        if (validar()) {
+    e.preventDefault()
+    if (validar()) {
+        localStorage.setItem("datos_usuario", JSON.stringify(form))
         setModalConfirm(true)
-        }
     }
+}
+
 
     return (
         <div className="min-h-screen bg-gray-50">
