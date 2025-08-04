@@ -7,8 +7,32 @@ import RifaCard from "@/components/rifaCardDB"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase-client"
+import { FileText, ArrowLeft } from "lucide-react"
 
 export default function Home() {
+    const terminos = [
+        {
+        titulo: "Participación",
+        contenido:
+            "Para participar en esta rifa, el usuario debe ser mayor de 18 años y proporcionar información veraz y completa. La compra de boletos constituye la aceptación total de estos términos y condiciones.",
+        },
+        {
+        titulo: "Sorteo y Premios",
+        contenido:
+            "El sorteo se realizará en la fecha especificada a través de nuestras redes sociales oficiales. Los premios se entregarán según las condiciones establecidas y no podrán ser canjeados por dinero en efectivo.",
+        },
+        {
+        titulo: "Responsabilidades",
+        contenido:
+            "La organización se reserva el derecho de verificar la identidad de los ganadores y descalificar cualquier participación fraudulenta. Los participantes son responsables de proporcionar datos correctos para el contacto.",
+        },
+        {
+        titulo: "Modificaciones",
+        contenido:
+            "La organización se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Cualquier cambio será comunicado a través de nuestros canales oficiales con la debida anticipación.",
+        },
+    ]
+
     const router = useRouter()
     const [activeRifaIds, setActiveRifaIds] = useState([])
     const [loading, setLoading] = useState(true)
@@ -53,9 +77,7 @@ export default function Home() {
 
     return (
         <div className="bg-white">
-        <NavBar />
-        
-        <div className="my-25 md:my-35 flex flex-wrap items-center justify-center gap-12 px-50">
+        <div className="my-25 md:my-35 flex flex-wrap items-center justify-center gap-12 px-5 md:px-30">
             {activeRifaIds.length > 0 ? (
             activeRifaIds.map(id => (
                 <RifaCard className="" key={id} id_rifa={id} isFull={false}>
@@ -69,44 +91,42 @@ export default function Home() {
             )}
         </div>
 
-        <Footer />
-
         {/* Modal de confirmación (sin cambios) */}
         {modalConfirm && (
             <div className="mx-3 fixed inset-0 flex items-center justify-center z-50 bg-transparent bg-opacity-30 backdrop-blur-sm">
-            <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
-                <div className="flex flex-col items-center justify-center gap-3">
-                <div>
-                    <h1><span className="text-black font-bold text-2xl">Términos y Condiciones</span></h1>
-                </div>
-                <div>
-                    <div className="flex flex-col text-left text-black gap-1 py-1">
-                    <h2><span className="font-bold text-md">Título 1:</span></h2>
-                    <p><span className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>
+                <div className="bg-white rounded-xl shadow-lg max-h-[90vh] md:max-h-[80vh] overflow-y-auto w-full max-w-lg md:max-w-2xl">
+                    {/* Header */}
+                    <div className="bg-orange-500 text-white p-6 sticky top-0 z-10">
+                        <div className="flex items-center gap-3 mb-2">
+                            <FileText className="w-6 h-6" />
+                            <h1 className="text-2xl font-bold">Términos y Condiciones</h1>
+                        </div>
+                        <p className="text-orange-100 text-sm">Lee cuidadosamente nuestros términos y condiciones antes de participar.</p>
                     </div>
-                    <div className="flex flex-col text-left text-black gap-1 py-1">
-                    <h2><span className="font-bold text-md">Título 2:</span></h2>
-                    <p><span className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>
+
+                    {/* Content */}
+                    <div className="p-6 space-y-6">
+                        {terminos.map((termino, index) => (
+                            <div key={index} className="space-y-2">
+                                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                    <span className="bg-orange-100 text-orange-600 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
+                                        {index + 1}
+                                    </span>
+                                    {termino.titulo}
+                                </h2>
+                                <p className="text-gray-700 leading-relaxed text-sm pl-8">{termino.contenido}</p>
+                            </div>
+                        ))}
                     </div>
-                    <div className="flex flex-col text-left text-black gap-1 py-1">
-                    <h2><span className="font-bold text-md">Título 3:</span></h2>
-                    <p><span className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>
-                    </div>
-                    <div className="flex flex-col text-left text-black gap-1 py-1">
-                    <h2><span className="font-bold text-md">Título 4:</span></h2>
-                    <p><span className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>
+                    <div className="p-6 border-t border-gray-200 sticky bottom-0 bg-white">
+                        <div className="text-center">
+                            <Button size="lg" onClick={() => setModalConfirm(false)} className="px-8">
+                                <ArrowLeft className="w-5 h-5 mr-2" />
+                                Aceptar
+                            </Button>
+                        </div>
                     </div>
                 </div>
-                <div className="w-full flex justify-center">
-                    <button
-                    className="w-[50%] bg-orange rounded mt-5"
-                    onClick={() => setModalConfirm(false)}
-                    >
-                    Volver
-                    </button>
-                </div>
-                </div>
-            </div>
             </div>
         )}
         </div>

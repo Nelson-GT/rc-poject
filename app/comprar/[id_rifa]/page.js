@@ -1,17 +1,12 @@
 "use client"
-import { NavBar } from "@/components/navbar"
-import Footer from "@/components/footer"
 import RifaCard from "@/components/rifaCardDB";
 import Button from "@/components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShoppingCart } from "lucide-react"
 import { useParams } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "@/lib/supabase-client"
+import SHA256 from "crypto-js/sha256";
 
 export default function Comprar() {
     const { id_rifa } = useParams()  
@@ -20,30 +15,51 @@ export default function Comprar() {
     const [modalConfirm, setModalConfirm] = useState(false)
     const [feedback, setFeedback] = useState("");
     const [loading, setLoading] = useState(false);
-    const precio = 180
-
+    const [precio, setPrecio] = useState(0);
     const cantidadesPredefinidas = [1, 2, 5, 10, 20, 50]
+
+    useEffect(() => {
+        async function obtenerPrecio() {
+            try {
+                const { data, error } = await supabase
+                .from('Rifas')
+                .select('precio')
+                .eq('id', id_rifa)
+                .single();
+                if (error) {
+                    throw error
+                }
+        
+                if (data) {
+                    setPrecio(data.precio)
+                }
+            } catch (err) {
+                console.error("Error al obtener la rifa:", err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        if (id_rifa) obtenerPrecio();
+        }, [id_rifa]);
 
     async function reservarBoletos() {
         setLoading(true);
         setFeedback("");
-        // Buscar boletos disponibles
-        const { data: boletos, error: errorBoletos } = await supabase
-            .from("Boletos")
-            .select("id, numero_boleto")
-            .eq("id_rifa", id_rifa)
-            .eq("estado", "disponible")
-            .limit(cantidad);
+        const { data: boletos, error: errorBoletos } = await 
+        supabase.rpc("boletos_aleatorios", {limite : cantidad,});
+        console.log()
+
         if (errorBoletos || !boletos || boletos.length < cantidad) {
-            setFeedback("No hay suficientes boletos disponibles en este momento.");
+            setFeedback("No hay suficientes boletos disponibles en este momento, por favor, Intentelo denuevo más tarde");
             setLoading(false);
             return;
         }
-        // Reservar los boletos encontrados
+        console.log(boletos);
         const ids = boletos.map(b => b.id);
+        const id_reserva = SHA256(ids.join("")).toString();
         const { error: errorReserva } = await supabase
             .from("Boletos")
-            .update({ estado: "reservado", fecha_compra: new Date().toISOString() })
+            .update({ estado: "reservado", fecha_compra: new Date().toISOString(), id_reserva: id_reserva })
             .in("id", ids)
             .eq("estado", "disponible");
         if (errorReserva) {
@@ -51,20 +67,14 @@ export default function Comprar() {
             setLoading(false);
             return;
         }
-        // Guardar los IDs de los boletos reservados en localStorage
-        if (typeof window !== "undefined") {
-            localStorage.setItem("boletos_reservados", JSON.stringify(ids));
-        }
         setFeedback("");
         setLoading(false);
-        // Redirigir a la siguiente etapa pasando id_rifa y cantidad
-        router.push(`/datos_usuario/${cantidad}`);
+        router.push(`/datos/${id_reserva}`);
     }
+
 
     return (
         <div className="min-h-screen bg-gray-50">
-        <NavBar />
-
         <div className="pt-20 pb-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pt-8">
                 <RifaCard id_rifa={id_rifa} isFull />
@@ -130,7 +140,6 @@ export default function Comprar() {
                                 <span className="font-medium text-gray-700">Total:</span>
                                 <span className="font-bold text-2xl text-orange-600">Bs {(cantidad * precio).toLocaleString()}</span>
                             </div>
-                            {feedback && <div className="text-red-500 text-center">{feedback}</div>}
                             <Button size="lg" className="w-full sm:w-auto px-8" onClick={() => setModalConfirm(true)} disabled={loading}>
                                 {loading ? "Reservando..." : `Continuar con ${cantidad} ticket${cantidad !== 1 ? "s" : ""}`}
                             </Button>
@@ -163,16 +172,21 @@ export default function Comprar() {
                                 <span className="font-bold text-lg text-gray-900">Total:</span>
                                 <span className="font-bold text-2xl text-orange-600">Bs {(cantidad * precio).toLocaleString()}</span>
                             </div>
+                            {feedback && 
+                                <div className="flex justify-between items-center py-3 px-3 ">
+                                    <div className="text-red-500 text-center">{feedback}</div>
+                                </div>
+                            }
                         </div>
 
                         <div className="flex gap-3">
-                            <Button variant="secondary" className="flex-1" onClick={() => setModalConfirm(false)}>
+                            <Button variant="secondary" className="flex-1" onClick={() => {setModalConfirm(false); setFeedback(null)}}>
                                 Cancelar
                             </Button>
                             <Button
                             variant="success"
                             className="flex-1"
-                            onClick={reservarBoletos}
+                            onClick={() =>  {reservarBoletos()}}
                             disabled={loading}
                         >
                             {loading ? "Reservando..." : "Aceptar"}
@@ -182,8 +196,6 @@ export default function Comprar() {
                 </div>
             </div>
         )}
-
-        <Footer />
         </div>
     )
 }

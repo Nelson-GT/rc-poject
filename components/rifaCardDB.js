@@ -64,17 +64,16 @@ export default function RifaCard({ children, id_rifa, isFull }) {
         return <p>No se encontraron datos para la rifa especificada.</p>
     }
 
-    // Aquí construimos las clases de forma más dinámica
-    console.log(isFull)
-    const cardWidthClasses = isFull ? "max-w-xl" : "max-w-sm";
+    // Clases condicionales para el ancho de la tarjeta
+    const cardWidthClasses = isFull ? "sm:max-w-xl" : "sm:max-w-sm";
     const baseClasses = "w-full bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden mx-auto";
 
     return (
         <div className={`${baseClasses} ${cardWidthClasses}`}>
-            <div className="w-full p-5">
+            <div className="w-full p-3 sm:p-5"> {/* Padding responsivo */}
                 <Image
                     src={rifaData.imagenRifa || "/placeholder.svg"}
-                    width={400} // Puedes hacer la imagen más grande también
+                    width={400}
                     height={0}
                     alt="Imagen Rifa"
                     className="w-full h-auto object-contain mx-auto rounded-xl"
@@ -82,7 +81,7 @@ export default function RifaCard({ children, id_rifa, isFull }) {
                 />
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4"> {/* Padding responsivo */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div className="flex items-center gap-2 text-gray-600">
                         <Calendar className="w-5 h-5 text-orange-500" />

@@ -1,6 +1,4 @@
 "use client"
-import { NavBar } from "@/components/navbar"
-import Footer from "@/components/footer"
 import Button from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { MapPinned, AlarmClockCheck, DoorOpen, Hamburger, MapPin, ArrowLeft } from "lucide-react"
@@ -10,22 +8,16 @@ export default function UbicacionPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
-            <NavBar />
-            
             <main className="flex-grow pt-20 pb-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto pt-8">
-                    {/* Header */}
                     <div className="bg-orange-500 text-white p-6 rounded-t-xl">
                         <div className="flex items-center gap-4">
                             <MapPinned className="w-8 h-8" />
                             <h1 className="text-2xl sm:text-3xl font-bold">Ubicación</h1>
                         </div>
                     </div>
-                    
-                    {/* Content */}
                     <div className="bg-white rounded-b-xl shadow-lg overflow-hidden p-6">
                         <div className="flex flex-col lg:flex-row gap-8 items-center">
-                            {/* Map */}
                             <div className="w-full lg:w-1/2">
                                 <div className="aspect-w-16 aspect-h-9 w-full">
                                     <iframe 
@@ -38,8 +30,6 @@ export default function UbicacionPage() {
                                     />
                                 </div>
                             </div>
-                            
-                            {/* Info */}
                             <div className="w-full lg:w-1/2 space-y-6">
                                 <div className="flex items-center gap-4">
                                     <div className="bg-orange-500 p-2 rounded-full text-white">
@@ -89,8 +79,6 @@ export default function UbicacionPage() {
                     </div>
                 </div>
             </main>
-            
-            <Footer />
         </div>
     )
 }

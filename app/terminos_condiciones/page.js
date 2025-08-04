@@ -1,6 +1,4 @@
 "use client"
-import { NavBar } from "@/components/navbar"
-import Footer from "@/components/footer"
 import Button from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { FileText, ArrowLeft } from "lucide-react"
@@ -33,8 +31,6 @@ export default function TerminosCondiciones() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-        <NavBar />
-
         <div className="pt-20 pb-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -84,8 +80,6 @@ export default function TerminosCondiciones() {
             </div>
             </div>
         </div>
-
-        <Footer />
         </div>
     )
 }
