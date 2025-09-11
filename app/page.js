@@ -10,6 +10,7 @@ import { supabase } from "@/lib/supabase-client"
 import { FileText, ArrowLeft } from "lucide-react"
 
 export default function Home() {
+
     const terminos = [
         {
         titulo: "Participación",
@@ -39,9 +40,16 @@ export default function Home() {
     const [error, setError] = useState(null)
     const [modalConfirm, setModalConfirm] = useState(true)
 
+
     useEffect(() => {
         async function fetchActiveRifaIds() {
         try {
+            const { data: updateData, error: updateError } = await supabase.rpc('actualizar_rifas');
+            if (updateError) {
+                console.error('Error al actualizar las rifas:', updateError);
+            } else {
+                console.log('El estado de las rifas se ha actualizado correctamente.');
+            }
             const { data, error } = await supabase
             .from('Rifas')
             .select('id')

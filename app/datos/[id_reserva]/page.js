@@ -60,6 +60,7 @@ export default function UnificarVistas() {
 
                 if (data && data.length > 0) {
                     setBoletosReservadosLista(data)
+                    console.log(data[0].id_rifa)
                     setIdRifa(data[0].id_rifa)
                 }
             }
@@ -84,7 +85,6 @@ export default function UnificarVistas() {
             if (error) throw error;
             if (data) {
             setPrecioRifa(data.precio);
-            console.log(data.precio);
             }
         } catch (err) {
             console.error("Error al obtener el precio de los boletos:", err);
@@ -183,6 +183,52 @@ export default function UnificarVistas() {
         }
     }
 
+    // --- FUNCION PARA GENERAR HTML DEL CORREO ---
+    const generateEmailHtml = (boletos, totalBoletos) => {
+        const listaBoletosHtml = boletos.map(boleto => `
+            <div style="background-color: #FA5400; color: #fff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); transform: var(--tw-transform); transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.2s;">
+                <div style="text-align: center;">
+                    <p style="font-size: 1.5rem; line-height: 2rem; font-weight: 700; color: #fff;">${boleto.numero_boleto}</p>
+                </div>
+            </div>
+        `).join('')
+
+        return `
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Tus Boletos de la Rifa</title>
+            </head>
+            <body style="font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; background-color: #f9fafb; margin: 0; padding: 0;">
+                <div style="min-height: 100vh; background-color: #f9fafb;">
+                    <div style="padding-top: 5rem; padding-bottom: 3rem;">
+                        <div style="max-width: 960px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem;">
+                            <div style="background-color: #fff; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); padding: 1.5rem;">
+                                <div style="text-align: center; padding-top: 2rem;">
+                                    <div style="margin-top: 1rem;">
+                                        <h1 style="font-size: 1.875rem; line-height: 2.25rem; font-weight: 700; color: #111827;">¡Felicidades!</h1>
+                                        <p style="color: #4b5563; font-size: 1.125rem; line-height: 1.75rem;">Estos son tus números de la suerte</p>
+                                        <div style="background-color: #fff7ed; border: 1px solid #fed7aa; border-radius: 0.5rem; padding: 1rem;">
+                                            <p style="color: #9a3412; font-weight: 500; font-size: 0.875rem; line-height: 1.25rem;">
+                                                Total de boletos: <span style="font-weight: 700;">${boletos.length}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 1rem; justify-content: center;">
+                                        ${listaBoletosHtml}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+    };
+
     const handlePagoSubmit = async (e) => {
         e.preventDefault()
         if (validarPago()) {
@@ -196,6 +242,7 @@ export default function UnificarVistas() {
             }
             
             const boletosIds = boletos_reservados_lista.map(boleto => boleto.id)
+            const boletosNumeros = boletos_reservados_lista.map(boleto => boleto.numero_boleto)
 
             const { error } = await supabase
                 .from("Boletos")
@@ -217,10 +264,35 @@ export default function UnificarVistas() {
                 setLoadingConfirmar(false)
                 return
             }
+/*
+            // Genera el HTML para el correo
+            const emailHtmlContent = generateEmailHtml(boletos_reservados_lista, boletos_reservados_lista.length);
+            
+            // Llama a tu propia ruta de API
+            const res = await fetch('/api/enviar-correo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "to" : {
+                        "address" : formDatos.correo,
+                        "nombre" : formDatos.nombre
+                    },
+                    "html": emailHtmlContent,
+                    "plain": boletosNumeros.join(', '), // Corregido 'pailn' a 'plain'
+                }),
+            });
 
-            setFeedback("")
-            setLoadingConfirmar(false)
-            setModalCompraExitosa(true)
+            const result = await res.json();
+
+            if (res.ok) {
+                console.log("Correo enviado con éxito (a través de la API local):", result);
+            } else {
+                console.error("Error al enviar el correo (a través de la API local):", result.message);
+            }
+*/
+            setModalCompraExitosa(true);
         }
     }
 

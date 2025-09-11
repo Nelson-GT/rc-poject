@@ -46,7 +46,7 @@ export default function Comprar() {
         setLoading(true);
         setFeedback("");
         const { data: boletos, error: errorBoletos } = await 
-        supabase.rpc("boletos_aleatorios", {limite : cantidad,});
+        supabase.rpc("boletos_aleatorios", {limite : cantidad, p_id_rifa : id_rifa});
         console.log()
 
         if (errorBoletos || !boletos || boletos.length < cantidad) {
@@ -57,15 +57,24 @@ export default function Comprar() {
         console.log(boletos);
         const ids = boletos.map(b => b.id);
         const id_reserva = SHA256(ids.join("")).toString();
-        const { error: errorReserva } = await supabase
-            .from("Boletos")
-            .update({ estado: "reservado", fecha_compra: new Date().toISOString(), id_reserva: id_reserva })
-            .in("id", ids)
-            .eq("estado", "disponible");
-        if (errorReserva) {
-            setFeedback("Error al reservar los boletos. Intenta de nuevo.");
-            setLoading(false);
-            return;
+
+        const now = new Date();
+        console.log("ahora",now);
+        const nowUTC = now.getTime() + (now.getTimezoneOffset() * 60000);
+        console.log("utc",nowUTC);
+        const nowUTC_minus_4 = new Date(nowUTC + (-4 * 3600000));
+        console.log("menos 4",nowUTC_minus_4);
+        const fechaUTC_minus_4 = nowUTC_minus_4
+        console.log("fecha menos 4",fechaUTC_minus_4);
+        
+        const { data, error } = await supabase.rpc('reservar_boletos', {
+            p_ids: ids,
+            p_id_reserva: id_reserva,
+        });
+        if (error) {
+            console.error('Error al reservar boletos:', error);
+        } else {
+            console.log('Boletos reservados exitosamente.');
         }
         setFeedback("");
         setLoading(false);
