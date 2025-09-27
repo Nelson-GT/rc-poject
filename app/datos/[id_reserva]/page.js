@@ -28,10 +28,13 @@ export default function UnificarVistas() {
     })
 
     const [formPago, setFormPago] = useState({
-        referencia: "",
-        banco: "0102",
-        tipoTlf: "0412",
+        monto: 0.0,
+        tipoCedula: "V",
+        cedula: "",
+        tipoTelefono: "58412",
         telefono: "",
+        referencia: "",
+        fecha: "",
     })
 
     const [modalConfirmPago, setModalConfirmPago] = useState(false)
@@ -60,7 +63,6 @@ export default function UnificarVistas() {
 
                 if (data && data.length > 0) {
                     setBoletosReservadosLista(data)
-                    console.log(data[0].id_rifa)
                     setIdRifa(data[0].id_rifa)
                 }
             }
@@ -163,15 +165,25 @@ export default function UnificarVistas() {
     }
 
     const validarPago = () => {
+        console.log(`Monto: ${formPago.monto}\nReferencia: ${formPago.referencia}\nCédula: ${formPago.tipoCedula}${formPago.cedula}\nN° teléfono: ${formPago.tipoTelefono}${formPago.telefono}\nFecha: ${formPago.fecha}`)
         const nuevosErrores = {}
         if (!formPago.referencia.trim()) {
             nuevosErrores.referencia = "Número de referencia requerido"
-        } else if (!/^\d{6,12}$/.test(formPago.referencia)) {
-            nuevosErrores.referencia = "Debe tener entre 6 y 12 dígitos"
+        } else if (!/^\d{6}$/.test(formPago.referencia)) {
+            nuevosErrores.referencia = "Debe tener 6 dígitos"
         }
         if (!/^\d{7}$/.test(formPago.telefono)) {
             nuevosErrores.telefono = "Número telefónico inválido (7 dígitos)"
         }
+        
+        if (!/^\d{7,8}$/.test(formPago.cedula)) {
+            nuevosErrores.cedula = "Formato de cédula incorrecto"
+        }
+        
+        if (formPago.monto < 0 ) {
+            nuevosErrores.cedula = "El monto no puede ser negativo"
+        }
+        
         setErroresPago(nuevosErrores)
         return Object.keys(nuevosErrores).length === 0
     }
@@ -183,7 +195,6 @@ export default function UnificarVistas() {
         }
     }
 
-    // --- FUNCION PARA GENERAR HTML DEL CORREO ---
     const generateEmailHtml = (boletos, totalBoletos) => {
         const listaBoletosHtml = boletos.map(boleto => `
             <div style="background-color: #FA5400; color: #fff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); transform: var(--tw-transform); transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.2s;">
@@ -383,30 +394,43 @@ export default function UnificarVistas() {
                                     <CreditCard className="w-8 h-8 text-orange-500 mx-auto mb-4" />
                                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Datos del Pago Móvil</h1>
                                     <p className="text-gray-600">Ingresa los datos de tu transferencia para verificar el pago</p>
+                                    <Button type="submit" className="flex-1 mt-5" onClick={() => {setModalConfirmPago(true)}}>
+                                        Ver datos
+                                    </Button>
                                 </div>
                                 <form onSubmit={handlePagoSubmit} className="space-y-6">
-                                    <Input label="Número de referencia *" value={formPago.referencia} onChange={(e) => setFormPago({ ...formPago, referencia: e.target.value })} placeholder="0123456789" error={erroresPago.referencia} />
-                                    <Select label="Banco Emisor *" value={formPago.banco} onChange={(e) => setFormPago({ ...formPago, banco: e.target.value })} error={erroresPago.banco}>
-                                        {bancos.map((banco) => (
-                                            <option key={banco.codigo} value={banco.codigo}>
-                                                {banco.codigo} - {banco.nombre}
-                                            </option>
-                                        ))}
-                                    </Select>
+                                    <Input type="number" label="Monto" value={formPago.monto} onChange={(e) => setFormPago({ ...formPago, monto: e.target.value })} placeholder="10.0" error={erroresPago.monto} required/>
+                                    
+                                    <Input label="Número de referencia (Últimos 6 dígitos)*" value={formPago.referencia} onChange={(e) => setFormPago({ ...formPago, referencia: e.target.value })} placeholder="123456" error={erroresPago.referencia} maxLength={6} minLength={6} required/>
+                                    
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Cédula (Emisor)*</label>
+                                        <div className="flex gap-3">
+                                            <Select value={formPago.tipoCedula} onChange={(e) => setFormPago({ ...formPago, tipoCedula: e.target.value })} className="w-24" required>
+                                                <option value="V">V</option>
+                                                <option value="E">E</option>
+                                            </Select>
+                                            <Input value={formPago.cedula} onChange={(e) => setFormPago({ ...formPago, cedula: e.target.value })} placeholder="1234567" maxLength={8} minLength={7} error={erroresPago.telefono} required/>
+                                        </div>
+                                    </div>
+                                    
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">Número de teléfono (Emisor) *</label>
                                         <div className="flex gap-3">
-                                            <Select value={formPago.tipoTlf} onChange={(e) => setFormPago({ ...formPago, tipoTlf: e.target.value })} className="w-24">
-                                                <option value="0412">0412</option>
-                                                <option value="0422">0422</option>
-                                                <option value="0414">0414</option>
-                                                <option value="0424">0424</option>
-                                                <option value="0416">0416</option>
-                                                <option value="0426">0426</option>
+                                            <Select value={formPago.tipoTelefono} onChange={(e) => setFormPago({ ...formPago, tipoTelefono: e.target.value })} className="w-24" required>
+                                                <option value="58412">0412</option>
+                                                <option value="58422">0422</option>
+                                                <option value="58414">0414</option>
+                                                <option value="58424">0424</option>
+                                                <option value="58416">0416</option>
+                                                <option value="58426">0426</option>
                                             </Select>
-                                            <Input value={formPago.telefono} onChange={(e) => setFormPago({ ...formPago, telefono: e.target.value })} placeholder="1234567" maxLength={7} error={erroresPago.telefono} />
+                                            <Input value={formPago.telefono} onChange={(e) => setFormPago({ ...formPago, telefono: e.target.value })} placeholder="1234567" maxLength={7} minLength={7} error={erroresPago.telefono} required/>
                                         </div>
                                     </div>
+                                    
+                                    <Input type="date" label="Fecha de Emisión*" value={formPago.fecha} onChange={(e) => setFormPago({ ...formPago, fecha: e.target.value })} placeholder="" error={erroresPago.referencia} required/>
+                                    
                                     {feedback && <div className="text-red-500 text-center mt-2">{feedback}</div>}
                                     <div className="flex flex-col sm:flex-row gap-4 pt-6">
                                         <Button type="button" variant="outline" className="flex-1 bg-transparent" onClick={() => setActiveTab("datos")}>

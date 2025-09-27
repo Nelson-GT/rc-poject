@@ -23,10 +23,10 @@ export const NavBar = () => {
                     {/* Logo */}
                     <Link href="/" aria-label="home" className="flex items-center space-x-2 flex-shrink-0">
                     <Image
-                        src="/corralitoOrange.jpg"
+                        src="/corralitosNuevo.jpg"
                         width={45}
                         height={45}
-                        className="rounded-full object-cover"
+                        className="rounded-full object-cover shadow-xl"
                         alt="Logo Corralitos"
                     />
                     <span className="hidden sm:block text-white font-bold text-lg">Corralitos</span>

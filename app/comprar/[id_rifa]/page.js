@@ -47,25 +47,19 @@ export default function Comprar() {
         setFeedback("");
         const { data: boletos, error: errorBoletos } = await 
         supabase.rpc("boletos_aleatorios", {limite : cantidad, p_id_rifa : id_rifa});
-        console.log()
 
         if (errorBoletos || !boletos || boletos.length < cantidad) {
             setFeedback("No hay suficientes boletos disponibles en este momento, por favor, Intentelo denuevo más tarde");
             setLoading(false);
             return;
         }
-        console.log(boletos);
         const ids = boletos.map(b => b.id);
         const id_reserva = SHA256(ids.join("")).toString();
 
         const now = new Date();
-        console.log("ahora",now);
         const nowUTC = now.getTime() + (now.getTimezoneOffset() * 60000);
-        console.log("utc",nowUTC);
         const nowUTC_minus_4 = new Date(nowUTC + (-4 * 3600000));
-        console.log("menos 4",nowUTC_minus_4);
         const fechaUTC_minus_4 = nowUTC_minus_4
-        console.log("fecha menos 4",fechaUTC_minus_4);
         
         const { data, error } = await supabase.rpc('reservar_boletos', {
             p_ids: ids,

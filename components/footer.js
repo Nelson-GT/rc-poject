@@ -18,10 +18,10 @@ export default function Footer() {
                     <div className="flex justify-center lg:justify-start">
                         <Link href="/" aria-label="go home" className="block">
                         <Image
-                            src="/corralitoOrange.jpg"
+                            src="/corralitosNuevo.jpg"
                             width={120}
                             height={120}
-                            className="rounded-full object-cover shadow-lg"
+                            className="rounded-full object-cover shadow-xl"
                             alt="logo Corralitos"
                         />
                         </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Instagram"
-                            className="p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
+                            className=" shadow-xl p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
                         >
                             <Instagram className="w-5 h-5" />
                         </Link>
@@ -59,7 +59,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="WhatsApp"
-                            className="p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
+                            className=" shadow-xl p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
                         >
                             <MessageCircleHeart className="w-5 h-5" />
                         </Link>
@@ -68,7 +68,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Linktree"
-                            className="p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
+                            className=" shadow-xl p-3 bg-orange-600 rounded-full hover:bg-orange-700 transition-colors duration-200"
                         >
                             <Palmtree className="w-5 h-5" />
                         </Link>
